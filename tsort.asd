@@ -1,7 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem :tsort
-  :version "0.0.2"
+  :version "0.0.3"
   :depends-on
   (
    "cl-utilities" ; Utility especially for collectors.

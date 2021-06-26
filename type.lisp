@@ -2,30 +2,20 @@
 
 ;;; Actually these are not needed, but for explaining implementation.
 
-(deftype graph()
-  "Graph represented by list."
-  'NODES)
+(deftype graph () "Graph represented by list." 'nodes)
 
-(deftype node()
+(deftype node ()
   "Element of GRAPH, represented by list."
-  '(CONS SUBJECT DIRECTIONS))
+  '(cons subject directions))
 
-(deftype nodes()
-  "List which contains only node."
-  'list)
+(deftype nodes () "List which contains only node." 'list)
 
-(deftype subject()
+(deftype subject ()
   "Identifier for NODE. We can say this is node's name, roughly."
-  '(NOT NULL))
+  '(not null))
 
-(deftype subjects()
-  "List which contains subject only."
-  'list)
+(deftype subjects () "List which contains subject only." 'list)
 
-(deftype direction()
-  'SUBJECTS)
+(deftype direction () 'subjects)
 
-(deftype directions()
-  "List which contains direction only."
-  'list)
-
+(deftype directions () "List which contains direction only." 'list)
