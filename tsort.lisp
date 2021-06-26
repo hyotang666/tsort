@@ -1,5 +1,4 @@
 (in-package :tsort)
-(named-readtables:in-readtable with-package:syntax)
 
 (defun tsort(graph &key (test #'eql)(key #'identity)group)
   (let((engrouper(if group
@@ -20,8 +19,6 @@
 		    (report-error rest :test test))))))
       (REC graph))))
 
-#@(:cl-utilities #:With-collectors)
-
 (macrolet((!(n form)
 	    `(HANDLER-CASE,form
 	       (ERROR()(ERROR 'INVALID-GRAPH
@@ -29,7 +26,7 @@
 
 
   (defun split(graph)
-    (With-collectors(INDIES DEPENDS)
+    (cl-utilities:With-collectors(INDIES DEPENDS)
       (labels((REC(nodes) ; recurse to catch up dotted list error.
 		(unless(! 1(endp nodes)) ; graph may dotted.
 		  (let((node(car nodes)))
