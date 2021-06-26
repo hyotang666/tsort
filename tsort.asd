@@ -1,11 +1,10 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem :tsort
-  :version "0.0.3"
+  :version "0.0.4"
   :depends-on
   (
    "cl-utilities" ; Utility especially for collectors.
-   "named-readtables" ; Manage readtables.
    "trestrul" ; Utilities for TREe STRUctured List.
    )
   :components((:file "tsort")))
