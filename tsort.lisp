@@ -125,16 +125,13 @@
                   (error 'invalid-graph
                          :format-arguments ,(aref #(node graph tree) n))))))
   (defun split (graph)
-    (cl-utilities:with-collectors (indies depends)
-      (labels ((rec (nodes) ; recurse to catch up dotted list error.
-                 (unless (! 1 (endp nodes)) ; graph may dotted.
-                   (let ((node (car nodes)))
-                     (if (independent-node-p node)
-                         (indies (car node))
-                         (depends node)))
-                   (rec (cdr nodes))))
-               (independent-node-p (node)
-                 (! 0 (endp (! 0 (cdr node))))) ; node may dotted. node may
-                                                ; atom.
-               )
-        (rec graph)))))
+    (labels ((independent-node-p (node)
+               (! 0 (endp (! 0 (cdr node)))))) ; node may dotted. node may atom.
+      (loop :for node :in graph
+                 ;; to catch up dotted list error.
+                 :by #'(lambda (l) (! 1 (cdr l)))
+            :if (independent-node-p node)
+              :collect (car node) :into indies
+            :else
+              :collect node :into depends
+            :finally (return (values indies depends))))))
