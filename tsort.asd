@@ -1,7 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem :tsort
-  :version "0.0.5"
+  :version "0.0.6"
   :depends-on
   (
    "trestrul" ; Utilities for TREe STRUctured List.

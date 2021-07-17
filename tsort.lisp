@@ -15,6 +15,8 @@
 
 (in-package :tsort)
 
+(declaim (optimize speed))
+
 ;;;; TYPES
 ;;; Actually these are not needed, but for explaining implementation.
 
@@ -76,7 +78,16 @@
             (error 'trampoline-graph :format-arguments arg))
         (error 'uncomplete-graph :format-arguments (lack rest)))))
 
-(defun circler-graph-p (rest &key (test #'eql) (key #'identity))
+(declaim
+ (ftype (function
+         (list &key (:test (or symbol function)) (:key (or symbol function)))
+         (values list &optional))
+        circler-graph-p))
+
+(defun circler-graph-p
+       (rest
+        &key (test #'eql) (key #'identity)
+        &aux (test (coerce test 'function)) (key (coerce key 'function)))
   (loop :for node1 :in rest
         :for (subject1 . direction1) = node1
         :if (find subject1 rest
@@ -84,8 +95,10 @@
                           (destructuring-bind
                               (subject2 . direction2)
                               node
-                            (and (find subject1 direction2 :test test :key key)
-                                 (find subject2 direction1
+                            (and (find subject1 (the list direction2)
+                                       :test test
+                                       :key key)
+                                 (find subject2 (the list direction1)
                                        :test test
                                        :key key)))))
           :collect it :into node2
@@ -103,7 +116,9 @@
   (let ((engrouper
          (if group
              #'cons
-             #'append)))
+             #'append))
+        (test (coerce test 'function))
+        (key (coerce key 'function)))
     (labels ((target (list)
                (lambda (x) (find (funcall key x) list :test test :key key)))
              (rec (g &optional acc)
@@ -117,6 +132,7 @@
                                                     :keep nil)
                            (funcall engrouper indies acc))
                          (report-error rest :test test))))))
+      (declare (ftype (function (list) (values function &optional)) target))
       (rec graph))))
 
 (macrolet ((! (n form)
