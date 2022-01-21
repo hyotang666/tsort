@@ -2,6 +2,11 @@
 (in-package :asdf)
 (defsystem :tsort
   :version "0.0.6"
+  :author "SATO Shinichi"
+  :description "Topological sorting."
+  :source-control (:git "git@github.com:hyotang666/tsort")
+  :bug-tracker "https://github.com/hyotang666/tsort/issues"
+  :license "MIT"
   :depends-on
   (
    "trestrul" ; Utilities for TREe STRUctured List.
