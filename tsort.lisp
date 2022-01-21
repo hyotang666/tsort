@@ -11,7 +11,9 @@
            #:recursive-graph
            #:trampoline-graph
            #:uncomplete-graph
-           #:invalid-graph))
+           #:invalid-graph
+           ;; Helper
+           #:make-dag))
 
 (in-package :tsort)
 
@@ -151,3 +153,23 @@
             :else
               :collect node :into depends
             :finally (return (values indies depends))))))
+
+;;;; MAKE-DAG
+
+(defun make-dag (node edge-generator)
+  "Make list of lists as Directed Acyclic Graph from NODE.
+  EDGE-GENERATOR should have signature (FUNCTION (NODE) LIST).
+  All elements of returned LIST must be NODE."
+  (setf edge-generator (coerce edge-generator 'function))
+  (let ((table (make-hash-table :test #'eq)))
+    (labels ((rec (nodes)
+               (if (endp nodes)
+                   (loop :for node :being :each :hash-key :of table :using
+                              (:hash-value edges)
+                         :collect (cons node edges))
+                   (body (car nodes) (cdr nodes))))
+             (body (subject rest)
+               (let ((edges (funcall edge-generator subject)))
+                 (setf (gethash subject table) edges)
+                 (rec (union rest edges :test #'eq)))))
+      (rec (list node)))))

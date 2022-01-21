@@ -1,7 +1,7 @@
 ; vim: ft=lisp et
 (in-package :asdf)
 (defsystem :tsort
-  :version "0.0.6"
+  :version "1.0.0"
   :author "SATO Shinichi"
   :description "Topological sorting."
   :source-control (:git "git@github.com:hyotang666/tsort")
