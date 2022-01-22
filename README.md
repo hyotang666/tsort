@@ -141,13 +141,13 @@ MIT
 ### Developped
 SBCL
 ### Tested
-SBCL/2.2.0
-CCL/1.12.1
-CLISP/2.49
-ECL/21.2.1
-ABCL/1.8.0
-allegro/10.1
-CMUCL/21D
+* SBCL/2.2.0
+* CCL/1.12.1
+* CLISP/2.49
+* ECL/21.2.1
+* ABCL/1.8.0
+* allegro/10.1
+* CMUCL/21D
 
 <!-- Links -->
 
