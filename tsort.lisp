@@ -137,17 +137,19 @@
       (declare (ftype (function (list) (values function &optional)) target))
       (rec graph))))
 
-(macrolet ((! (n form)
-             `(handler-case ,form
-                (error ()
-                  (error 'invalid-graph
-                         :format-arguments ,(aref #(node graph tree) n))))))
-  (defun split (graph)
-    (labels ((independent-node-p (node)
-               (! 0 (endp (! 0 (cdr node)))))) ; node may dotted. node may atom.
+(defun split (graph)
+  (labels ((independent-node-p (node)
+             (typecase node
+               ((or (and atom (not null)) ; Non NIL ATOM.
+                    (cons t (and atom (not null)))) ; Dotted.
+                (error 'invalid-graph :format-arguments 'node))
+               ((cons t null) t)
+               (otherwise nil))))
+    (handler-bind (((and error (not invalid-graph))
+                    (lambda (condition)
+                      (declare (ignore condition))
+                      (error 'invalid-graph :format-arguments 'graph))))
       (loop :for node :in graph
-                 ;; to catch up dotted list error.
-                 :by #'(lambda (l) (! 1 (cdr l)))
             :if (independent-node-p node)
               :collect (car node) :into indies
             :else
