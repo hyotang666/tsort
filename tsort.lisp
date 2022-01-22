@@ -73,7 +73,7 @@
              (simple-condition-format-arguments c)))))
 
 (defun report-error (rest &key (test #'eql) (key #'identity))
-  (let ((arg (circler-graph-p rest :test test :key key)))
+  (let ((arg (cyclic-graph-p rest :test test :key key)))
     (if arg
         (if (eq (first arg) (second arg)) ; it is self recursive.
             (error 'recursive-graph :format-arguments arg)
@@ -84,9 +84,9 @@
  (ftype (function
          (list &key (:test (or symbol function)) (:key (or symbol function)))
          (values list &optional))
-        circler-graph-p))
+        cyclic-graph-p))
 
-(defun circler-graph-p
+(defun cyclic-graph-p
        (rest
         &key (test #'eql) (key #'identity)
         &aux (test (coerce test 'function)) (key (coerce key 'function)))
